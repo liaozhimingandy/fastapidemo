@@ -1,0 +1,19 @@
+[project]
+name = "FastAPIDemo"
+version = "0.1.0"
+description = "demo"
+authors = [
+    {name = "liaozhimingandy@qq.com", email = "liaozhimingandy@qq.com"},
+]
+dependencies = ["fastapi>=0.115.6", "uvicorn>=0.34.0", "pydantic>=2.10.4"]
+requires-python = ">=3.13"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true

@@ -1,0 +1,11 @@
+./.dockerignore
+./.gitignore
+./.venv/
+./.pdm-build/
+./Dockerfile
+./README.md
+./.idea/
+./.git/
+./.pdm-python
+./tests/
+./test_main.http
