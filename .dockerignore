@@ -8,4 +8,4 @@
 ./.git/
 ./.pdm-python
 ./tests/
-./test_main.http
+test_app.http

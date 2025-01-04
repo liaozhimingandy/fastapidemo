@@ -3,9 +3,9 @@ name = "FastAPIDemo"
 version = "0.1.0"
 description = "demo"
 authors = [
-    {name = "liaozhimingandy@qq.com", email = "liaozhimingandy@qq.com"},
+    {name = "liaozhimingandy", email = "liaozhimingandy@qq.com"},
 ]
-dependencies = ["fastapi>=0.115.6", "uvicorn>=0.34.0", "pydantic>=2.10.4"]
+dependencies = ["fastapi>=0.115.6", "uvicorn>=0.34.0", "pydantic>=2.10.4", "sqlmodel>=0.0.22"]
 requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "MIT"}
