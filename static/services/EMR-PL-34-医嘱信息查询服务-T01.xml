@@ -1,0 +1,68 @@
+<QUMT_IN020030UV01 xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ITSVersion="XML_1.0" xsi:schemaLocation="urn:hl7-org:v3 ../multicacheschemas/ QUMT_IN020030UV01.xsd">
+    <id extension="3a20835b324a480fb5ac50df05ca99a7" root="2.16.156.10011.2.5.1.1" />
+    <creationTime value="20230918170955" />
+    <interactionId extension="QUMT_IN020030UV01" root="2.16.156.10011.2.5.1.2" />
+    <processingCode code="P" />
+    <processingModeCode />
+    <acceptAckCode code="AL" />
+    <receiver typeCode="RCV">
+        <telecom />
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id>
+                <item extension="107" root="2.16.156.10011.2.5.1.3" />
+            </id>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <telecom />
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id>
+                <item extension="12361" root="2.16.156.10011.2.5.1.3" />
+            </id>
+        </device>
+    </sender>
+    <controlActProcess classCode="CACT" moodCode="EVN">
+        <queryByParameter>
+            <statusCode code="new" />
+            <queryByParameterPayload>
+                <statusCode code="new" />
+                
+                <actId>
+                    <value>
+                        <item extension="123456" root="2.16.156.10011.2.5.1.31" />
+                    </value>
+                    <semanticsText value="Act" />
+                </actId>
+                
+                <authorId>
+                    <value>
+                        <item extension="" root="2.16.156.10011.1.4" />
+                    </value>
+                    <semanticsText value="author.Entity.ID" />
+                </authorId>
+                
+                <effectiveTime>
+                    <value>
+                        <low value="" />
+                        <high value="" />
+                    </value>
+                    <semanticsText value="EffectiveTime" />
+                </effectiveTime>
+                
+                <patientId>
+                    <value>
+                        <item extension="" root="2.16.156.10011.2.5.1.4" />
+                    </value>
+                    <semanticsText value="recordTarget.Patient.ID" />
+                </patientId>
+                
+                <statusCodeParam>
+                    <value>
+                        <item code="active" />
+                    </value>
+                    <semanticsText value="StatusCode" />
+                </statusCodeParam>
+            </queryByParameterPayload>
+        </queryByParameter>
+    </controlActProcess>
+</QUMT_IN020030UV01>

@@ -1,0 +1,354 @@
+{
+  data: [
+    {
+      params: [
+        {
+          comment: "患者ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:parameterList/xmlns:id/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级乙等",
+      serviceCode: "PatientInfoQuery",
+      serviceName: "个人信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "科室ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameterPayload/xmlns:organizationID/xmlns:value/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级乙等",
+      serviceCode: "OrganizationInfoQuery",
+      serviceName: "医疗卫生机构（科室）信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "员工工号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameterPayload/xmlns:providerID/xmlns:value[@root='2.16.156.10011.1.4']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级乙等",
+      serviceCode: "ProviderInfoQuery",
+      serviceName: "医疗卫生人员信息查询服务"
+    },
+    {
+      rank: "五级乙等",
+      serviceCode: "TerminologyQuery",
+      serviceName: "术语查询服务",
+      params: [
+        {
+          comment: "术语Cod",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:valueSet/xmlns:valueSetItems/xmlns:code/@code",
+          sql: "select * FROM MD_M06001 NOLOCK WHERE CODE = /*/controlActProcess/queryByParameter/valueSet/valueSetItems/code/@code",
+          value: ""
+        }
+      ]
+    },
+    {
+      params: [
+        {
+          comment: "cda文档ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryId/@extension",
+          sql: "select * from CDADocument WHERE DocumentID = /RCMR_IN000029UV01/controlActProcess/queryByParameter/queryId/@extension",
+          value: ""
+        }
+      ],
+      rank: "三级",
+      serviceCode: "DocumentAccess",
+      serviceName: "电子病历文档调阅服务"
+    },
+    {
+      params: [
+        {
+          comment: "cda文档ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:clinicalDocument.id/xmlns:value/@extension",
+          sql: "select * from CDADocument WHERE DocumentID = /RCMR_IN000029UV01/controlActProcess/queryByParameter/queryId/@extension",
+          value: ""
+        }
+      ],
+      rank: "三级",
+      serviceCode: "DocumentRetrieve",
+      serviceName: "电子病历文档检索服务"
+    },
+    {
+      params: [
+        {
+          comment: "就诊卡号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:parameterList/xmlns:id/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "EncounterCardInfoQuery",
+      serviceName: "就诊卡信息查询服务"
+    },
+    {
+      rank: "五级乙等",
+      serviceCode: "SourceAndScheduleInfoQuery",
+      serviceName: "号源排班信息查询服务",
+      params: [
+        {
+          comment: "患者ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:scheduleId/xmlns:value/@extension",
+          sql: "",
+          value: ""
+        }
+      ]
+    },
+    {
+      params: [
+        {
+          comment: "就诊流水号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:careEventID/xmlns:value/xmlns:item[@root='2.16.156.10011.2.5.1.9']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "OutPatientInfoQuery",
+      serviceName: "门诊挂号信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "就诊流水号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:careEventID/xmlns:value/xmlns:item[@root='2.16.156.10011.2.5.1.9']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "InPatientInfoQuery",
+      serviceName: "住院就诊信息查询服务"
+    },
+    {
+      rank: "四级甲等",
+      serviceCode: "TransferInfoQuery",
+      serviceName: "住院转科信息查询服务",
+      params: [
+        {
+          comment: "就诊流水号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:careEventID/xmlns:value/xmlns:item[@root='2.16.156.10011.2.5.1.9']/@extension",
+          sql: "",
+          value: ""
+        }
+      ]
+    },
+    {
+      params: [
+        {
+          comment: "就诊流水号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:careEventID/xmlns:value/xmlns:item[@root='2.16.156.10011.2.5.1.9']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "DischargeInfoQuery",
+      serviceName: "出院登记信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "医嘱号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "OrderInfoQuery",
+      serviceName: "医嘱信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "检验申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item[@root='2.16.156.10011.1.24']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四 级甲等",
+      serviceCode: "ExamAppInfoQuery",
+      serviceName: "检验申请信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "检查申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item[1]/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "CheckAppInfoQuery",
+      serviceName: "检查申请信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "病理检查申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "PathologyAppInfoQuery",
+      serviceName: "病理申请信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "输血申请单单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item[@root='2.16.156.10011.1.24']/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "BloodTransAppInfoQuery",
+      serviceName: "输血申请信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "手术申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "四级甲等",
+      serviceCode: "OperationAppInfoQuery",
+      serviceName: "手术申请信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "预约ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryId/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "OutPatientAppointStatusInfoQuery",
+      serviceName: "门诊预约状态信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "检查预约ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "CheckAppointStatusInfoQuery",
+      serviceName: "检查预约状态信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "医嘱执行ID",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "OrderFillerStatusInfoQuery",
+      serviceName: "医嘱执行状态信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "检查申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "CheckStatusInfoQuery",
+      serviceName: "检查状态信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "检验申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "ExamStatusInfoQuery",
+      serviceName: "检验状态信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "手术申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "OperationScheduleInfoQuery",
+      serviceName: "手术排班信息查询服务"
+    },
+    {
+      params: [
+        {
+          comment: "手术申请单号",
+          eg: "",
+          path: "xmlns:controlActProcess/xmlns:queryByParameter/xmlns:queryByParameterPayload/xmlns:actId/xmlns:value/xmlns:item/@extension",
+          sql: "",
+          value: ""
+        }
+      ],
+      rank: "五级乙等",
+      serviceCode: "OperationStatusInfoQuery",
+      serviceName: "手术状态信息查询服务"
+    }
+  ]
+}

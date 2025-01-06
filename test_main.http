@@ -1,0 +1,19 @@
+# Test your FastAPI endpoints
+
+### 测试根路径
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+### 测试say_hello
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+Content-Encoding: utf-8
+
+### 测试graphQL
+
+GRAPHQL 127.0.0.1:8000/graphql
+query Hello {
+    hello(name: "test")
+}
