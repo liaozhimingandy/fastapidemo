@@ -5,7 +5,19 @@ description = "demo"
 authors = [
     {name = "liaozhimingandy", email = "liaozhimingandy@qq.com"},
 ]
-dependencies = ["fastapi>=0.115.6", "uvicorn>=0.34.0", "pydantic>=2.10.4", "sqlmodel>=0.0.22"]
+dependencies = [
+    "fastapi>=0.115.6",
+    "uvicorn>=0.34.0",
+    "pydantic>=2.10.4",
+    "sqlmodel>=0.0.22",
+    "strawberry-graphql[fastapi]>=0.256.1",
+    "pandas>=2.2.3",
+    "pyodbc>=5.2.0",
+    "psycopg[binary]>=3.2.3",
+    "python-docx>=1.1.2",
+    "aiosqlite>=0.20.0",
+    "greenlet>=3.1.1"
+]
 requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "MIT"}

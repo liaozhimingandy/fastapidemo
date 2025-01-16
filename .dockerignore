@@ -8,4 +8,6 @@
 ./.git/
 ./.pdm-python
 ./tests/
+./.env
+./.env.dev
 test_main.http

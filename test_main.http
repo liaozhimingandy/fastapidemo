@@ -13,7 +13,10 @@ Content-Encoding: utf-8
 
 ### 测试graphQL
 
-GRAPHQL 127.0.0.1:8000/graphql
-query Hello {
-    hello(name: "test")
+POST 127.0.0.1:8000/graphql
+Accept: application/json
+
+query ReadCdasByAdmNo {
+    readCdasByAdmNo(admNo: "18284908")
 }
+

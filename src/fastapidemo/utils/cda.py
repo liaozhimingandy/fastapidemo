@@ -10,6 +10,8 @@
     @Desc: cda导出工具类
 =================================================
 """
+import asyncio
+
 import pandas as pd
 import pyodbc
 
@@ -87,12 +89,29 @@ class CDATool(object):
                 f'SERVER={self.ip};'
                 f'DATABASE={self.dbname};'
                 f'UID={self.user};'
-                f'PWD={self.password}'
+                f'PWD={self.password}',
+                timeout=3
             )  # 获取连接
+
         except(Exception,) as e:
             return None
         else:
             return self.conn.cursor()
+
+    # 异步函数封装
+    async def get_db_cursor_async(self):
+        """
+        将同步函数封装成异步函数,避免阻塞执行线程
+
+        Returns:
+            协程
+
+        """
+        loop = asyncio.get_event_loop()
+        # 将阻塞操作提交到线程池中执行
+        # func必须为函数,不能为协程对象
+        result = await loop.run_in_executor(None, self.get_cursor)
+        return result
 
     def __del__(self):
         if self.conn:
@@ -110,10 +129,20 @@ class CDATool(object):
         df.to_excel(f'统计数据-{file_name}.xlsx')
 
 
-def query_to_dict(cursor):
-    """将查询结果转换为字典"""
+def query_to_dict(cursor) -> list:
+    """
+    将查询数据集转成字典数据集
+
+    Args:
+        cursor: 数据库操作游标
+
+    Returns:
+        List: 返回列表,列表里的元素为字典
+    """
     columns = [column[0] for column in cursor.description]
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
 
 if __name__ == "__main__":
     pass

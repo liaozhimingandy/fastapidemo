@@ -8,6 +8,7 @@
     @Date：2025/1/4 09:45
     @Desc: 
 ================================================="""
+import asyncio
 import os
 import shutil
 import uuid
@@ -16,6 +17,7 @@ import zipfile
 from types import NoneType
 from typing import Optional, List
 
+from strawberry import Info
 from typing_extensions import Annotated, Doc
 import strawberry
 from strawberry.fastapi import GraphQLRouter
@@ -101,7 +103,7 @@ async def update_demo_param(service: str, dir_name: str, *args) -> None:
         doc.write(result_file, pretty_print=True, xml_declaration=True, encoding='UTF-8')
 
 
-def create_examples_zip(dir_name: Annotated[str, Doc("目录名称")], is_service: bool = True) -> str:
+async def create_examples_zip(dir_name: Annotated[str, Doc("目录名称")], is_service: bool = True) -> str:
     """
     根据指定的目录名称,将该目录打包生成zip文件,并且返回压缩文件名称
 
@@ -203,10 +205,10 @@ class Query:
         # 创建后台任务执行生成zip文件
         info.context['background_tasks'].add_task(create_examples_zip, dir_name=dir_name, is_service=True)
 
-        return f'{os.getenv('STATIC_BASE_URL', 'http://localhost:8000')}/static/temp/archive-services-{dir_name}.zip'
+        return f'{info.context.get('request').base_url}static/temp/archive-services-{dir_name}.zip'
 
     @strawberry.field(description="通过就诊流水号获取cda文档")
-    async def read_cdas_by_adm_no(self, adm_no: Annotated[str, Doc("就诊流水号")], info=strawberry.Info) -> str:
+    async def read_cdas_by_adm_no(self, adm_no: Annotated[str, Doc("就诊流水号")], info: Optional[Info] =strawberry.Info) -> str:
         """
         根据就诊流水号导出该条件下符合条件的所有CDA并且生成xml,最后打包成zip文件供下载使用
 
@@ -220,14 +222,15 @@ class Query:
         """
         sql = ("select [no], PatientName patient_name, DocTypeCode doc_type_code, DocContent content "
                "from(SELECT row_number() over(partition by DocTypeCode order by CreateTime asc) no, [PatientName], DocTypeCode, [DocContent] "
-               "from [CDADocument] where Visit_id = ? ) as T where T.[no] < ?")
+               "from CDADocument where Visit_id = ? ) as T where T.[no] < ?")
 
         cda = CDATool(ip=os.getenv("ip", '172.16.33.179'), user=os.getenv('user', 'caradigm'),
                       password=os.getenv('password', 'Knt2020@lh'), dbname=os.getenv('dbname', 'CDADB'))
 
-        cursor = cda.get_cursor()
+        # 将同步函数封装成异步函数,防止阻塞进程
+        cursor = await cda.get_db_cursor_async()
         assert not isinstance(cursor, (NoneType,)), "数据库连接失败"
-        cursor.execute(sql, (adm_no, int(os.getenv('MAX_CDA_NUM', 20))))
+        await cursor.execute(sql, (adm_no, int(os.getenv('MAX_CDA_NUM', 20))))
 
         # 临时文件路径
         dir_path = uuid.uuid4()
@@ -251,14 +254,16 @@ class Query:
             # loop = asyncio.get_event_loop()
             # loop.run_in_executor(executor, create_examples_zip, dir_name=dir_path, is_service=False)
 
+        cursor.close()
+        cda.conn.commit()
         assert is_have_cda, "未查询到CDA"
         # 创建后台任务执行生成zip文件
         info.context['background_tasks'].add_task(create_examples_zip, dir_name=dir_path, is_service=False)
 
-        return f'{os.getenv('STATIC_BASE_URL', 'http://localhost:8000')}/static/temp/archive-cdas-{dir_path}.zip'
+        return f'{info.context.get('request').base_url}static/temp/archive-cdas-{dir_path}.zip'
 
 
-schema = strawberry.Schema(query=Query)
+schema = strawberry.federation.Schema(query=Query)
 router = GraphQLRouter(schema=schema)
 
 
