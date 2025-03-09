@@ -6,13 +6,14 @@
     @Author：liaozhimingandy
     @Email: liaozhimingandy@gmail.com
     @Date：2025/1/13 09:50
-    @Desc: 
+    @Desc: 侦测数据库,将数据库表结构逆向导出为程序模型
 ================================================="""
-import os
+import os.path
+from datetime import datetime, date
+
 import sqlalchemy
-from sqlalchemy import create_engine, inspect, MetaData, Table
-from sqlmodel import SQLModel, Field
-from typing import List, Optional
+from sqlalchemy import create_engine, inspect, MetaData
+from typing import List, Any
 import re
 
 
@@ -30,16 +31,18 @@ def get_table_columns(engine, table_name):
     return columns
 
 
-def get_pydantic_field_type(column_type: str):
+def get_pydantic_field_type(column_type: str) -> Any:
     """根据数据库字段类型返回SQLModel字段类型"""
-    if 'INTEGER' in column_type:
+    if 'INTEGER' in column_type or 'INT' in column_type:
         return int
     elif 'VARCHAR' in column_type or 'TEXT' in column_type:
         return str
     elif 'BOOLEAN' in column_type:
         return bool
-    elif 'DATE' in column_type:
-        return str  # 可以使用 `datetime.date` 来处理日期
+    elif 'TIMESTAMP' in column_type:
+        return datetime
+    elif 'DATE' in column_type or 'TIME' in column_type:
+        return date  # 可以使用 `datetime.date` 来处理日期
     elif 'FLOAT' in column_type or 'DECIMAL' in column_type:
         return float
     return str
@@ -59,7 +62,7 @@ def create_sqlmodel_model(table_name: str, columns: List[dict]) -> str:
 
         # 处理字段是否为可选（NULLABLE）
         is_nullable = column['nullable']
-        field_type = Optional[pydantic_type] if is_nullable else pydantic_type
+        field_type = pydantic_type | None if is_nullable else pydantic_type.__name__
 
         # 如果有注释，作为description传入
         description = f"'{column_comment}'" if column_comment else "''"
@@ -98,12 +101,13 @@ def generate_models_from_db(database_url: str, output_file: str):
             # 将 SQLModel 模型写入同一个文件
             f.write(sqlmodel_class + "\n\n")
 
-    print(f"所有模型已成功生成并保存到文件: {output_file}")
+    print(f"所有模型已成功生成并保存到文件: {os.path.abspath(output_file)}")
 
 
 if __name__ == "__main__":
     # 数据库连接 URL (根据实际情况修改)
-    from database import DATABASE_URL
-    OUTPUT_FILE = "all_models.py"
+    DATABASE_NAME = "chat"
+    DATABASE_URL = f"postgresql+psycopg://zhiming:zhiming@localhost:5432/{DATABASE_NAME}"
+    OUTPUT_FILE = f"all-models-{DATABASE_NAME}.py"
 
     generate_models_from_db(DATABASE_URL, OUTPUT_FILE)

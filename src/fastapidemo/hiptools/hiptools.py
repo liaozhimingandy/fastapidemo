@@ -8,7 +8,6 @@
     @Date：2025/1/4 09:45
     @Desc: 
 ================================================="""
-import asyncio
 import os
 import shutil
 import uuid
@@ -23,7 +22,7 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 from lxml import etree as et
 
-from fastapidemo.utils import CDATool, query_to_dict, cda_map
+from src.fastapidemo.utils import CDATool, query_to_dict, cda_map
 
 # 定义XML命名空间
 namespace = {'xmlns': 'urn:hl7-org:v3'}
@@ -183,7 +182,7 @@ class Query:
     hello: str = strawberry.field(resolver=resolve_hello, description="仅供测试")
 
     @strawberry.field(description="生成交互服务测试用例")
-    async def examples_services(self, data: Annotated[DataInputType, Doc("入参")], info=strawberry.Info) -> str| None:
+    async def examples_services(self, data: Annotated[DataInputType, Doc("入参")], info: Info) -> str| None:
         """
         生成交互服务测试用例
 
@@ -197,7 +196,6 @@ class Query:
         """
         # 临时文件路径
         dir_name = str(uuid.uuid4())
-
         # 处理数据（这里可以根据需要处理 input_data）
         for item in data.data:
             await update_demo_param(item.service_code, dir_name, *item.params)
@@ -208,13 +206,13 @@ class Query:
         return f'{info.context.get('request').base_url}static/temp/archive-services-{dir_name}.zip'
 
     @strawberry.field(description="通过就诊流水号获取cda文档")
-    async def read_cdas_by_adm_no(self, adm_no: Annotated[str, Doc("就诊流水号")], info: Optional[Info] =strawberry.Info) -> str:
+    async def read_cdas_by_adm_no(self, adm_no: Annotated[str, Doc("就诊流水号")], info: Info) -> str:
         """
         根据就诊流水号导出该条件下符合条件的所有CDA并且生成xml,最后打包成zip文件供下载使用
 
         Args:
             adm_no: 就诊流水号
-            info: 用于添加后台任务
+            info: 用于添加后台任务;Info
 
         Returns:
             供下载使用的链接

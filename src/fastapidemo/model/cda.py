@@ -10,18 +10,17 @@
     @Desc: 第三代电子病历共享文档(CDA)模型
 =================================================
 """
-import enum
+from enum import Enum
 from decimal import Decimal
-from uuid import UUID, uuid4
+from datetime import datetime, date
 
 from sqlalchemy import Boolean, SMALLINT
 from sqlmodel import SQLModel, Field
-from datetime import datetime, date
 
 TABLE_PREFIX = "cda"
 
 
-class GenderEnum(enum.Enum):
+class GenderEnum(Enum):
     """
     性别枚举
     """
@@ -46,22 +45,25 @@ class BaseModel(SQLModel, table=False):
     CAD模型公共信息部分
     """
 
-    id: int | None = Field(default=None, primary_key=True, description="表主键", title="表主键")
-    gmt_created: datetime = Field(default_factory=datetime.now, description="记录创建日期时间")
+    id: int | None = Field(default=None, primary_key=True, description="表主键", title="表主键",
+                           sa_column_kwargs={"comment": "表主键"})
+    gmt_created: datetime = Field(default_factory=datetime.now, description="记录创建日期时间",
+                                  sa_column_kwargs={"comment": "记录创建日期时间"})
     is_finished: bool = Field(default=False, sa_type=Boolean, description="文档完成标识,1:已完成生成,0未生成,默认为0",
                               sa_column_kwargs={"comment": "完成标识"})
-    gmt_finish: datetime | None = Field(None, description="文档生成日期时间")
-    doc_id: UUID = Field(default_factory=uuid4, max_length=36, description="文档流水号", index=True)
-    adm_no: str = Field(..., max_length=36, description="就诊流水号", index=True)
-    data_src: str = Field(..., max_length=36, description="数据来源,请参照主数据标准字典:医疗卫生机构")
-
-    class Config:
-        use_enum_values = True
+    gmt_finish: datetime | None = Field(None, description="文档生成日期时间",
+                                        sa_column_kwargs={"comment": "文档生成日期时间"})
+    doc_id: str = Field(..., max_length=36, description="文档流水号",
+                         index=True, sa_column_kwargs={"comment": "文档流水号"})
+    adm_no: str = Field(..., max_length=36, description="就诊流水号", index=True,
+                        sa_column_kwargs={"comment": "就诊流水号"})
+    data_src: str = Field(..., max_length=36, description="数据来源,请参照主数据标准字典:医疗卫生机构",
+                          sa_column_kwargs={"comment": "数据来源"})
 
 
 class Position(SQLModel, table=False):
     """
-    位置信息
+    位置信息, 科室,病区,病房,病床
     """
     dept_id: str = Field(..., max_length=36, description="科室代码")
     dept_name: str = Field(..., max_length=36, description="科室名称")
@@ -79,42 +81,6 @@ class Test(SQLModel, table=True):
     age: int = Field(..., description="年龄", le=150, ge=0)
     gender_code: GenderEnum = Field(default=GenderEnum.UnKnown, description="性别代码", sa_type=SMALLINT)
 
-    class Config:
-        from_attributes = True
-
-    # @classmethod
-    # @model_validator(mode="before")
-    # def check_data(cls, values):
-    #     """将gender_code转换为枚举类型
-    #
-    #     Examples:
-    #         d = Test.model_validate(data) # 得到的是有枚举类型的数据
-    #         session.add(d.model_dump()) # 得到的是没有枚举类型的数据
-    #         Select(Test).where(Test.id == t.id) # 得到的是没有枚举类型的数据
-    #     """
-    #
-    #     gender_code = values.get('gender_code')
-    #     if isinstance(gender_code, int):
-    #         values['gender_code'] = GenderEnum(gender_code)
-    #     return values
-
-    # @classmethod
-    # @model_validator(mode="after")
-    # def conver_data_after(cls, values):
-    #     """将gender_code转换为int类型
-    #
-    #     Examples:
-    #         d = Test.model_validate(data) # 得到的是有枚举类型的数据
-    #         session.add(d.model_dump()) # 得到的是没有枚举类型的数据
-    #         Select(Test).where(Test.id == t.id) # 得到的是没有枚举类型的数据
-    #     """
-    #
-    #     gender_code = values.get('gender_code')
-    #     if isinstance(gender_code, enum.Enum):
-    #         values['gender_code'] = values["gender_code"].value
-    #     return values
-
-
 
     @property
     def gender_name(self):
@@ -125,8 +91,8 @@ class C0017(Position, BaseModel, table=True):
     """
     一般护理记录
     """
-    # 表名
-    __tablename__ = f"{TABLE_PREFIX}_c0017"
+
+    __tablename__ = f"{TABLE_PREFIX}_c0017"  # 表名
     __table_args__ = {'comment': '一般护理记录'}  # 表备注
     
     inpatient_id: str = Field(..., max_length=18, description='住院号')
@@ -190,9 +156,6 @@ class C0017(Position, BaseModel, table=True):
     isolation_cls_code:str = Field(..., max_length=8, description='隔离种类代码')
     isolation_cls_name:str = Field(..., max_length=100, description='隔离种类名称')
 
-    class Config:
-        from_attributes = True
-
         
 class C0018(Position, BaseModel, table=True):
     """
@@ -252,9 +215,6 @@ class C0018(Position, BaseModel, table=True):
     #     CheckConstraint('diastolic_pressure < systolic_pressure', name='check_diastolic_pressure_less_than_systolic_pressure'),
     # )
 
-    class Config:
-        from_attributes = True
-        
         
 class C0020(Position, BaseModel, table=True):
     """
@@ -298,9 +258,6 @@ class C0020(Position, BaseModel, table=True):
     abdominal_girth: Decimal = Field(..., description='腹围（cm）', max_digits=4, decimal_places=1, sa_column_kwargs={'comment': '腹围（cm）'})
     nursing_observation_item_name: str = Field(..., max_length=64, description='护理观察项目名称', sa_column_kwargs={'comment': '护理观察项目名称'})
     nursing_observation_result: str = Field(..., max_length=128, description='护理观察结果', sa_column_kwargs={'comment': '护理观察结果'})
-
-    class Config:
-        from_attributes = True
 
 
 if __name__ == "__main__":

@@ -6,17 +6,16 @@
     @Author：liaozhimingandy
     @Email: liaozhimingandy@gmail.com
     @Date：2025/1/4 09:56
-    @Desc: 
+    @Desc:
 ================================================="""
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from fastapidemo.model.cda import Test
-from fastapidemo.model.database import get_session
+from ..model.cda import Test
+from ..model.database import get_session
 
 router = APIRouter()
-
 
 @router.get("/")
 async def root():
@@ -24,7 +23,7 @@ async def root():
 
 
 @router.get("/hello/{name}/")
-async def say_hello(name: str, session: AsyncSession = Depends(get_session)):
+async def say_hello(name, session: AsyncSession = Depends(get_session)):
     statement = select(Test).where(Test.name == name)
     result = await session.execute(statement)
     test = result.scalar().first()
@@ -34,8 +33,4 @@ async def say_hello(name: str, session: AsyncSession = Depends(get_session)):
 
 @router.get("/api/chat/")
 async def chat():
-    return "Hello World"
-
-
-if __name__ == "__main__":
-    pass
+    return {"message": "Hello World"}

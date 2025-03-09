@@ -9,6 +9,7 @@
     @Desc: 
 ================================================="""
 from .cda import CDATool, query_to_dict, cda_map
+from .utils import deprecated
 
 
 if __name__ == "__main__":

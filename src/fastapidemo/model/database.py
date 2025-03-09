@@ -25,7 +25,7 @@ AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_com
 
 
 def create_db_and_table():
-    """创建所有数据库和表"""
+    """ 同步的方式创建所有数据库和表 """
     SQLModel.metadata.create_all(engine)
     # 删除所有表
     # SQLModel.metadata.drop_all(engine)
@@ -39,8 +39,9 @@ async def get_session() -> AsyncSession:
 
 
 async def create_db_async():
-    """创建数据库"""
+    """ 异步的形式创建数据库 """
     from cda import Test, C0017, C0018
+    from src.fastapidemo.account import ACCOUNT, APP
     async with engine.begin() as conn:
         # 使用 SQLAlchemy 的异步连接创建表
         await conn.run_sync(SQLModel.metadata.create_all)
